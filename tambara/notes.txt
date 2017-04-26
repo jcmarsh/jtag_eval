@@ -1,0 +1,3 @@
+From Lucas Antunes Tambara <latambara@inf.ufrgs.br>.
+
+Lucas: "No special build configuration was used as well as optimization (-O0)."
