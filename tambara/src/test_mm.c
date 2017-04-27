@@ -32,7 +32,8 @@
  */
 
 #include <stdio.h>
-#include "xil_cache.h"
+// #include "xil_cache.h"
+#include <xil_cache_l.h>
 #include "xtime_l.h"
 #include "sleep.h"
 
