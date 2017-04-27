@@ -1,3 +1,5 @@
 From Lucas Antunes Tambara <latambara@inf.ufrgs.br>.
 
 Lucas: "No special build configuration was used as well as optimization (-O0)."
+
+From the code it looks like they used a Xilinx helloworld example as the base... as did I. So it shouldn't be too tough to get running, I hope. I think that they used a defferent dev board, so it might not be exactly the same.
