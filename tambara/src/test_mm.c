@@ -66,6 +66,7 @@ int main()
 
 		printf("\n\r__________TEST_MATRIX_MULTIPLICATION__________\n\r");
 
+		// TODO: Need to make this a build option and make sure matches cache enable calls
 		printf("CACHE_L1I ON\n\r");
 		printf("CACHE_L1D ON\n\r");
 		printf("CACHE_L2 ON\n\r");
