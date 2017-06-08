@@ -1,7 +1,9 @@
 # jtag_eval
 Code related to evaluating JTAG based fault injection.
 
-TODO: zybo getting started link
+This repo currently has instructions on how to perform a manual fault injection on a Zybo board using a Beaglebone running OpenOCD to perform the jtag injection.
+
+For the Zybo board, Digilent has a good tutorial on setting up Xilinx tools and loading your first bit file / program: https://reference.digilentinc.com/learn/programmable-logic/tutorials/zybo-getting-started-with-zynq/start
 
 ## Dependencies
 
@@ -40,8 +42,8 @@ On the Zybo:
 * Switch power on
 
 On Laptop:
-* Navigate to directory `instr.xsdb`
-* Modify `instr.xsdb` to have the correct directories for the `.bit`, `.elf`, and `ps7_init.tcl` files
+* Navigate to directory `xsdb/instr.xsdb`
+* Modify `instr.xsdb` to have the correct directories for the `.bit`, `.elf`, and `ps7_init.tcl` files. Normally only the `.elf` file will change.
 * `instr.xsdb` contains the commands that `xsdb` will run. The same commands may be entered manually.
 * `xsdb instr.xsdb` - This will connect to the Zybo over the USB connection, load the `.bit` file for the FPGA, run an initialization `tcl` script, and load the `.elf` file for the ARM cores.
 * In `xsdb`, the command `targets` will show detected devices (should show the FPGA, and two ARM cores)
@@ -58,9 +60,9 @@ Setup the Beaglebone.
 * If desired, connect the serial cable to the Beaglebone. If using a four wire connector, DO NOT CONNECT THE POWER WIRE. J1 pin 1 (index 1) is ground, RX and TX are 4 and 5 (check labels, orange on pin 4, yellow on pin 4 for the three wire connector). See picture.
 * Connect USB to host laptop (will power on Beaglebone)
 * Connect to Beaglebone via usb (ssh to 192.168.X.X) or serial: `minicom -D \dev\ttyUSB0` and set hardware flow control off (`ctrl-a o` for menu)
-* Navigate to `jtag_eval` directory (may need to clone)
-* `sudo openocd bbb.cfg`
-* Beaglebone is now running a telnet host for OpenOCD. Can connect from the Beaglebone with `telnet localhost 4444`. Should also be usable for by `GDB`.
+* Navigate to `jtag_eval/OpenOCD` directory (may need to clone the repo)
+* `sudo openocd openocd.cfg`
+* Beaglebone is now running a telnet host for OpenOCD. Can connect from the Beaglebone with `telnet localhost 4444`. Should also be usable for by `GDB` and from remote connections.
 
 <img src="img/beaglebone_connections.jpg" alt="BeagleBone connections" width="600">
 
@@ -68,7 +70,6 @@ Setup the Beaglebone.
 
 The benchmark code from other research groups may not be available to release.
 
-Tambara - 
+Tambara - Same build process as Fib_Rec.
 
-Chielle -
-
+Chielle - Have not yet attempted to compile. Assembly.
