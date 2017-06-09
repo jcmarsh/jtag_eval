@@ -60,7 +60,7 @@ Setup the Beaglebone.
 * If desired, connect the serial cable to the Beaglebone. If using a four wire connector, DO NOT CONNECT THE POWER WIRE. J1 pin 1 (index 1) is ground, RX and TX are 4 and 5 (check labels, orange on pin 4, yellow on pin 4 for the three wire connector). See picture.
 * Connect USB to host laptop (will power on Beaglebone)
 * Connect to Beaglebone via usb (ssh to 192.168.X.X) or serial: `minicom -D \dev\ttyUSB0` and set hardware flow control off (`ctrl-a o` for menu)
-* Navigate to `jtag_eval/OpenOCD` directory (may need to clone the repo)
+* Navigate to `jtag_eval/openOCD_cfg` directory (may need to clone the repo)
 * `sudo openocd openocd.cfg`
 * Beaglebone is now running a telnet host for OpenOCD. Can connect from the Beaglebone with `telnet localhost 4444`. Should also be usable for by `GDB` and from remote connections.
 
@@ -73,3 +73,6 @@ The benchmark code from other research groups may not be available to release.
 Tambara - Same build process as Fib_Rec.
 
 Chielle - Have not yet attempted to compile. Assembly.
+
+## TODO
+* Automate initialization, setup and execution of the board and program within a Makefile
