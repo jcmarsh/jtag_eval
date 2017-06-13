@@ -7,10 +7,10 @@ For the Zybo board, Digilent has a good tutorial on setting up Xilinx tools and 
 
 ## Dependencies
 
-* `arm-none-eabi-gcc`
-* `xsdb` - This comes with Xilinx Vivado
-* Xilinx Vivado - Needed to build everything from scratch like the `.bit` file. Alternatively, you can use the files provided here (but you still need to install `xsdb`)
-* more?
+* Download and install one of the below:
+  * Xilinx Vivado - Full suite for FPGA and Core programming
+  * Xilinx SDK - Eclipse like development environment environment (use the .bit located in this repo for the FPGA)
+  * Xilinx CLI - Minimal tool set for uploading to Zybo board (use the .bit located in this repo for the FPGA)
 
 ## Basic BSP (Board Support Package)
 This board support package is for using the 0th ARM core of the Zynq-70X0 chip on the Zybo board.
