@@ -21,6 +21,14 @@ To  build:
 * `source setup.sh`
 * `cd basic_bsp`
 * `make`
+  * If `make` failes:
+    * `cd ./ps7_cortexa9_0`
+    * `mkdir ./lib`
+    * `sudo updatedb`
+    * `locate libxil.a` (Or whichever library it reports is missing)
+    * Copy the library from the location reported into ./lib
+    * `cd ../`
+    * rerun `make`
 
 ## Fib Rec
 This is an example program that calculates a number in the fibonacci sequence twice and compare the results (should be the same, unless data corruption occurs...). Outputs results to a serial port.
