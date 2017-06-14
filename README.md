@@ -7,10 +7,10 @@ For the Zybo board, Digilent has a good tutorial on setting up Xilinx tools and 
 
 ## Dependencies
 
-* `arm-none-eabi-gcc`
-* `xsdb` - This comes with Xilinx Vivado
-* Xilinx Vivado - Needed to build everything from scratch like the `.bit` file. Alternatively, you can use the files provided here (but you still need to install `xsdb`)
-* more?
+* Download and install one of the below:
+  * Xilinx Vivado - Full suite for FPGA and Core programming
+  * Xilinx SDK - Eclipse-like development environment (use the .bit located in this repo for the FPGA)
+  * Xilinx CLI - Minimal tool set for uploading to Zybo board (use the .bit located in this repo for the FPGA)
 
 ## Basic BSP (Board Support Package)
 This board support package is for using the 0th ARM core of the Zynq-70X0 chip on the Zybo board.
@@ -21,6 +21,14 @@ To  build:
 * `source setup.sh`
 * `cd basic_bsp`
 * `make`
+  * If `make` failes:
+    * `cd ./ps7_cortexa9_0`
+    * `mkdir ./lib`
+    * `sudo updatedb`
+    * `locate libxil.a` (Or whichever library it reports is missing)
+    * Copy the library from the location reported into ./lib
+    * `cd ../`
+    * rerun `make`
 
 ## Fib Rec
 This is an example program that calculates a number in the fibonacci sequence twice and compare the results (should be the same, unless data corruption occurs...). Outputs results to a serial port.
