@@ -10,6 +10,7 @@ ifneq (,$(findstring win,$(RDI_PLATFORM)))
 endif
 
 all: libs
+	@touch done
 	@echo 'Finished building libraries'
 
 include: $(addsuffix /make.include,$(SUBDIRS))
@@ -29,3 +30,4 @@ $(PROCESSOR)/lib/libxil.a: $(PROCESSOR)/lib/libxil_init.a
 
 clean:
 	rm -f ${PROCESSOR}/lib/libxil.a
+	rm done
