@@ -17,7 +17,7 @@ This board support package is for using the 0th ARM core of the Zynq-70X0 chip o
 
 To  build:
 
-* Edit `setup.sh` to add the directory with `arm-none-eabi-gcc` to `PATH`
+* Edit `source_me.sh` to add the directory with `arm-none-eabi-gcc` to `PATH`
 * `source setup.sh`
 * `cd basic_bsp`
 * `make`
