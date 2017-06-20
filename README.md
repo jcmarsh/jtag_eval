@@ -82,5 +82,7 @@ Tambara - Same build process as Fib_Rec.
 
 Chielle - Have not yet attempted to compile. Assembly.
 
+RTEMS cFS - Build the cFS-OSS repo; rtems branch. Run rtems_run.sh to launch on the Zybo. Does not support jtag injection yet.
+
 ## TODO
 * Automate initialization, setup and execution of the board and program within a Makefile
