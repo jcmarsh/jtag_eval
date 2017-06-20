@@ -19,6 +19,7 @@ crash the system... guessing it overwrote the stack.
 ****************************************************/
 
 #include <stdio.h>
+#include <stdlib.h>
 #include "platform.h"
 #include <xgpio.h>
 #include "xparameters.h"
@@ -73,7 +74,7 @@ int main()
 	init_platform();
 
 	xil_printf("Starting program\n\r");
-	while(1){
+	while(loop_count < 6){
 		xil_printf("Starting big loop: %d\n\r", loop_count++);
 		fib_sum_i = 0;
 		fib_sum_r = 0;
@@ -104,5 +105,6 @@ int main()
 		}
 	}
 	cleanup_platform();
+	xil_printf("safeword ");
 	return 0;
 }
