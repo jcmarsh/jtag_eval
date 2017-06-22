@@ -60,6 +60,8 @@ int main()
     XTime time1;
     XTime time2;
 
+    int count = 0;
+
     while(1)
     {
 		XTime_GetTime((XTime *) &time1);
@@ -232,6 +234,8 @@ int main()
 		printf("\n\r");
 
 		sleep(5);
+		count++;
+		if (count > 5) printf("safeword \n");
     }
 
     return 0;

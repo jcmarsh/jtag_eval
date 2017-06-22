@@ -25,32 +25,32 @@ endif
 
 # Add inputs and outputs from these tool invocations to the build variables 
 ELFSIZE += \
-Attempt2.elf.size \
+fib_rec.elf.size \
 
 
 # All Target
 all: pre-build main-build
 
 # Main-build Target
-main-build: Attempt2.elf secondary-outputs
+main-build: fib_rec.elf secondary-outputs
 
 # Tool invocations
-Attempt2.elf: $(OBJS) ../src/lscript.ld $(USER_OBJS)
+fib_rec.elf: $(OBJS) ../src/lscript.ld $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: ARM v7 gcc linker'
-	arm-none-eabi-gcc -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -Wl,-build-id=none -specs=Xilinx.spec -Wl,-T -Wl,../src/lscript.ld -L../../basic_bsp/ps7_cortexa9_0/lib -o "Attempt2.elf" $(OBJS) $(USER_OBJS) $(LIBS)
+	arm-none-eabi-gcc -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -Wl,-build-id=none -specs=Xilinx.spec -Wl,-T -Wl,../src/lscript.ld -L../../basic_bsp/ps7_cortexa9_0/lib -o "fib_rec.elf" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
-Attempt2.elf.size: Attempt2.elf
+fib_rec.elf.size: fib_rec.elf
 	@echo 'Invoking: ARM v7 Print Size'
-	arm-none-eabi-size Attempt2.elf  |tee "Attempt2.elf.size"
+	arm-none-eabi-size fib_rec.elf  |tee "fib_rec.elf.size"
 	@echo 'Finished building: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) $(EXECUTABLES)$(OBJS)$(S_UPPER_DEPS)$(C_DEPS)$(ELFSIZE) Attempt2.elf
+	-$(RM) $(EXECUTABLES)$(OBJS)$(S_UPPER_DEPS)$(C_DEPS)$(ELFSIZE) fib_rec.elf
 	-@echo ' '
 
 pre-build:
