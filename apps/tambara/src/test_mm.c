@@ -224,7 +224,7 @@ int main()
 		}
 		else
 		{
-			printf("TEST_MATRIX_MULTIPLICATION FAILED\n\r");
+			printf("TEST_MATRIX_MULTIPLICATION FAILED \n\r");
 		}
 
 		XTime_GetTime((XTime *) &time2);
