@@ -24,6 +24,7 @@ crash the system... guessing it overwrote the stack.
 #include <xgpio.h>
 #include "xparameters.h"
 #include "sleep.h"
+#include <unistd.h>
 
 int fib_i(int n) {
 	int ii;
@@ -72,6 +73,9 @@ int main()
 
 	XGpio_SetDataDirection(&output, 1, 0x0);		//set first channel tristate buffer to output
 	init_platform();
+
+	/* Let the debugger catch up */
+	sleep(1);
 
 	xil_printf("Starting program\n\r");
 	while(loop_count < 6){
