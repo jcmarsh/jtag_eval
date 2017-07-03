@@ -1,3 +1,20 @@
 Sent by Eduardo Chielle <echielle@inf.ufrgs.br>.
 
 This is the unhardened version. The hardened version has to be generated using their tool (available)?
+
+Key:
+data-flow techniques:
+	Software protection for the data stored in registers or memory
+control-flow techinques:
+	Software protection for the program exection order
+
+VAR:
+	- A set of seventeen data-flow techniques that aim at reducing overheads in performances,
+	  memory and energy consuption
+	- As the variation # increases, the amount of checking rules decreases. See TABLE 1 and TABLE 2
+	  in "Reliability on ARM processors against Soft Errors by a Purely Software Approach"
+	  (Eduardo Chielle, IEEE 2015)
+
+Source Code Naming Conventions:
+	- p = +
+
