@@ -228,14 +228,17 @@ int main()
 		}
 
 		XTime_GetTime((XTime *) &time2);
-		printf("EXECUTION_TIME %lld\n\r", time2-time1);
+		//printf("EXECUTION_TIME %lld\n\r", time2-time1);
 
 		printf("______________________________________________\n\r");
 		printf("\n\r");
 
-		sleep(5);
+		//sleep(5);
 		count++;
-		if (count > 5) printf("safeword \n");
+		if (count > 9) {
+			printf("safeword \n");
+			while(1);
+		}
     }
 
     return 0;
