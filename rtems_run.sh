@@ -4,7 +4,7 @@ echo -e  "-------- Run cFS RTEMS build on Zybo ----------"
 
 # copy the cFS rtems build... assumes directory structure
 echo -e  "-------- copy core-rtems.exe over -------------"
-cp ../../cFS-OSS/build/cpu4/exe/core-rtems.exe ./
+cp ../../cFE/build/zybo_rtems/rtems/rki.elf ./core-rtems.exe
 
 # Ask to turn on Zybo
 echo -e  "-------- Load onto Zybo, monitor with minicom -"
