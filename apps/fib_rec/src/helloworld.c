@@ -50,7 +50,7 @@ int fib_r(int n) {
 	}
 }
 
-#define FIB_COUNT 38 // 40 takes about 15 seconds
+#define FIB_COUNT 10// 40 takes about 15 seconds
 
 int main()
 {
@@ -74,18 +74,21 @@ int main()
 	XGpio_SetDataDirection(&output, 1, 0x0);		//set first channel tristate buffer to output
 	init_platform();
 
+        /* Tell DrSEUS that initialization is done and asm_golden_run can start */
+        xil_printf("control \n");
 	/* Let the debugger catch up */
 	sleep(1);
 
 	xil_printf("Starting program\n\r");
-	while(loop_count < 6){
+	while(loop_count < 3) {
+	//while(1) {
 		xil_printf("Starting big loop: %d\n\r", loop_count++);
 		fib_sum_i = 0;
 		fib_sum_r = 0;
 
 		// xil_printf("sizeof int: %d, sizeof long: %d\n", sizeof(int), sizeof(long));
-		switch_data = (switch_data + 1) % 2;	// flip light
-		XGpio_DiscreteWrite(&output, 1, switch_data | switch_data_error);	//write switch data to the LEDs
+		// switch_data = (switch_data + 1) % 2;	// flip light
+		// XGpio_DiscreteWrite(&output, 1, switch_data | switch_data_error);	//write switch data to the LEDs
 
 		for (ii = 1; ii <= FIB_COUNT; ii++) {
 			fib_out_i = fib_i(ii);
