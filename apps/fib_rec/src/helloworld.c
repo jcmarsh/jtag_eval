@@ -76,8 +76,7 @@ int main()
 
         /* Tell DrSEUS that initialization is done and asm_golden_run can start */
         xil_printf("control \n");
-	/* Let the debugger catch up */
-	sleep(1);
+	sleep(2);
 
 	xil_printf("Starting program\n\r");
 	while(loop_count < 3) {
