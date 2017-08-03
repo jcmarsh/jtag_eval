@@ -34,6 +34,7 @@
 #include <stdio.h>
 // #include "xil_cache.h"
 #include <xil_cache_l.h>
+#include <xil_cache.h>
 #include "xtime_l.h"
 #include "sleep.h"
 
@@ -51,9 +52,16 @@ int main()
 {
     init_platform();
 
-    Xil_L1ICacheEnable();
-    Xil_L1DCacheEnable();
-    Xil_L2CacheEnable();
+//    Xil_L1ICacheEnable();
+//    Xil_L1DCacheEnable();
+//    Xil_L2CacheEnable();
+
+    Xil_L1ICacheDisable();
+    Xil_L1DCacheDisable();
+    Xil_L2CacheDisable();
+
+    Xil_DCacheDisable();
+    Xil_ICacheDisable();
 
     char isEqual = 1;
 
@@ -69,13 +77,14 @@ int main()
 		printf("\n\r__________TEST_MATRIX_MULTIPLICATION__________\n\r");
 
 		// TODO: Need to make this a build option and make sure matches cache enable calls
-		printf("CACHE_L1I ON\n\r");
-		printf("CACHE_L1D ON\n\r");
-		printf("CACHE_L2 ON\n\r");
+		//printf("CACHE_L1I ON\n\r");
+		//printf("CACHE_L1D ON\n\r");
+		//printf("CACHE_L2 ON\n\r");
 
 #ifndef MEM_USAGE
 	INPUT
 #endif
+                printf("control \n");
 
 		isEqual &= matrix_multiplication(a_0, b_0, c_0, 0);
 		isEqual &= matrix_multiplication(a_1, b_1, c_1, 1);

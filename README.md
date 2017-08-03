@@ -84,5 +84,11 @@ Chielle - Have not yet attempted to compile. Assembly.
 
 RTEMS cFS - Build the cFS-OSS repo; rtems branch. Run rtems_run.sh to launch on the Zybo. Does not support jtag injection yet.
 
+## Running applications without caches
+
+To run an applicaiton without cache, one must do two things:
+1. Caches must be disabled in the application itself through xil cache disable calls
+2. MMU must be disabled through openocd command. This command can be found in asm_golden_run.py in master_jtag/scripts/transfer/
+
 ## TODO
 * Automate initialization, setup and execution of the board and program within a Makefile
