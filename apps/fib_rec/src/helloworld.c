@@ -50,7 +50,7 @@ int fib_r(int n) {
 	}
 }
 
-#define FIB_COUNT 10// 40 takes about 15 seconds
+#define FIB_COUNT 12 // 40 takes about 15 seconds
 
 int main()
 {
@@ -58,10 +58,7 @@ int main()
 	XGpio output;
 	int fib_out_i = 0;
 	int fib_out_r = 0;
-	int fib_sum_i = 0;
-	int fib_sum_r = 0;
 	int loop_count = 0;
-	int ii = 0;
 	int switch_data = 0;
 	int switch_data_error = 0;
 
@@ -76,38 +73,28 @@ int main()
 
         /* Tell DrSEUS that initialization is done and asm_golden_run can start */
         xil_printf("control \n");
-	sleep(2);
+	/* Let the debugger catch up */
+	sleep(5);
 
 	xil_printf("Starting program\n\r");
 	while(loop_count < 3) {
 	//while(1) {
 		xil_printf("Starting big loop: %d\n\r", loop_count++);
-		fib_sum_i = 0;
-		fib_sum_r = 0;
 
 		// xil_printf("sizeof int: %d, sizeof long: %d\n", sizeof(int), sizeof(long));
 		// switch_data = (switch_data + 1) % 2;	// flip light
 		// XGpio_DiscreteWrite(&output, 1, switch_data | switch_data_error);	//write switch data to the LEDs
 
-		for (ii = 1; ii <= FIB_COUNT; ii++) {
-			fib_out_i = fib_i(ii);
-			fib_out_r = fib_r(ii);
+		fib_out_i = fib_i(FIB_COUNT);
+		fib_out_r = fib_r(FIB_COUNT);
 
-			if (fib_out_i != fib_out_r) {
-				xil_printf("Fibs do not match: %d, %d %d\n\r", ii, fib_out_i, fib_out_r);
-			}
-			if (fib_out_i < 0 || fib_out_r < 0) {
-				xil_printf("Fib overflow: %d, %d %d\n\r", ii, fib_out_i, fib_out_r);
-			}
-			fib_sum_i += fib_out_i;
-			fib_sum_r += fib_out_r;
-			// xil_printf("Fib sum %d: %d (%d)\n\r", ii, fib_sum_i, fib_out_i);
+                if (fib_out_i != fib_out_r) {
+			xil_printf("Fibs do not match: %d, %d %d\n\r", FIB_COUNT, fib_out_i, fib_out_r);
+                } else {
+			xil_printf("Result: %d, %d\n\r", fib_out_i, fib_out_r);
 		}
-		if (fib_sum_i != fib_sum_r) {
-			xil_printf("MISMATCH in results: %d, %d\n\r", fib_sum_i, fib_sum_r);
-			switch_data_error = 4;
-		} else {
-			xil_printf("Result: %d, %d\n\r", fib_sum_i, fib_sum_r);
+		if (fib_out_i < 0 || fib_out_r < 0) {
+			xil_printf("Fib overflow: %d, %d %d\n\r", FIB_COUNT, fib_out_i, fib_out_r);
 		}
 	}
 	cleanup_platform();
