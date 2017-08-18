@@ -59,8 +59,8 @@ int main()
 	int fib_out_i = 0;
 	int fib_out_r = 0;
 	int loop_count = 0;
-	int switch_data = 0;
-	int switch_data_error = 0;
+	// int switch_data = 0;
+	// int switch_data_error = 0;
 
 	// XGpio_Initialize(&input, XPAR_AXI_GPIO_0_DEVICE_ID);	//initialize input XGpio variable
 	XGpio_Initialize(&output, XPAR_AXI_GPIO_1_DEVICE_ID);	//initialize output XGpio variable
