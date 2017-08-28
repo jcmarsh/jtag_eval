@@ -70,6 +70,7 @@ int main()
 
     int count = 0;
 
+    printf("control \n");
     while(1)
     {
 		XTime_GetTime((XTime *) &time1);
@@ -84,7 +85,6 @@ int main()
 #ifndef MEM_USAGE
 	INPUT
 #endif
-                printf("control \n");
 
 		isEqual &= matrix_multiplication(a_0, b_0, c_0, 0);
 		isEqual &= matrix_multiplication(a_1, b_1, c_1, 1);
