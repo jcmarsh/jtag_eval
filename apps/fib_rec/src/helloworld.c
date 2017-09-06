@@ -71,10 +71,8 @@ int main()
 	XGpio_SetDataDirection(&output, 1, 0x0);		//set first channel tristate buffer to output
 	init_platform();
 
-        /* Tell DrSEUS that initialization is done and asm_golden_run can start */
-        xil_printf("control \n");
-	/* Let the debugger catch up */
-	sleep(5);
+        /* Set a breakpoint on this label to let DrSEUS restart exectuion when readdy. */
+        asm("drseus_sync_tag:");
 
 	xil_printf("Starting program\n\r");
 	while(loop_count < 3) {

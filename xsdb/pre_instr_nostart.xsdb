@@ -6,5 +6,3 @@ source ps7_init.tcl
 ps7_init
 ps7_post_config
 dow ./Attempt2.elf
-exit
-
