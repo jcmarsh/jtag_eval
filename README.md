@@ -63,7 +63,7 @@ Follow the instructions above to launch the fibonacci program on the Zybo.
 
 <img src="img/setup_annotated_s.png" alt="Example setup" width="768">
 
-Setup the Beaglebone.
+Setup the BeagleBone.
 * Connect the JTAG cable (5 pin, white wires). The Zybo connection is by the VGA port; connect with the 3v3 labled pin in the empty socket and GND, TCK, TDO, TDI, and TMS all connected. On the Beaglebone, the male connector will connect to P8, pins 2, 8, 10, 12, 14 (defined in `bbb.cfg`). See picture.
 * If desired, connect the serial cable to the Beaglebone. If using a four wire connector, DO NOT CONNECT THE POWER WIRE. J1 pin 1 (index 1) is ground, RX and TX are 4 and 5 (check labels, orange on pin 4, yellow on pin 4 for the three wire connector). See picture.
 * Connect USB to host laptop (will power on Beaglebone)
@@ -73,6 +73,26 @@ Setup the Beaglebone.
 * Beaglebone is now running a telnet host for OpenOCD. Can connect from the Beaglebone with `telnet localhost 4444`. Should also be usable for by `GDB` and from remote connections.
 
 <img src="img/beaglebone_connections.jpg" alt="BeagleBone connections" width="600">
+
+## RaspberryPi 3 Configuration
+
+There is a driver for using OpenOCD with the Raspberry Pi (bcm2835gpio).
+This allows the Pi to run the JTAG interface at speeds that the BeagleBone can not achieve using the filesystem interface for gpio.
+
+To set up a Pi to use as the OpenOCD device:
+* Format an SD card with a Raspbian release - Used Etcher to format a 16G card with Raspbian Lite.
+* Add a file named `ssh` on the boot partition - Sets the Pi to enable ssh for the next boot.
+* Plug Pi into USB and Ethernet on host computer (share wired connection) - Used a laptop with Ubuntu 16.04.
+* Connect with ssh - `ssh pi@raspberrypi.local`, password is `raspberry`
+* pi> sudo raspi-config - turn on ssh (5 -> P2) and change password as desired (1) (used `temppwd!`, must be "strong" to avoid warnings).
+* pi> sudo apt-get update
+* pi> sudo apt-get git libtool autotools-dev automake
+* pi> git clone https://git.code.sf.net/p/openocd/code openocd-code
+* pi> cd openocd-code; ./bootstrap; ./configure --enable-sysfsgpio --enable-bcm2835gpio; make; sudo make install; cd ../
+* pi> git clone https://github.com/jcmarsh/jtag_eval.git - will change in the future
+* pi> cd jtag_eval; git checkout james_pi - will change in the future
+* pi> mkdir openOCD_cfg/mnt
+* ssh-copy-id pi@raspberrypi.local
 
 ## Benchmark Code
 
