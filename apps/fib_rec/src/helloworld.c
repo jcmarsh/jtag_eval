@@ -72,7 +72,7 @@ int main()
 	init_platform();
 
         /* Set a breakpoint on this label to let DrSEUS restart exectuion when readdy. */
-        asm("drseus_sync_tag:");
+        asm("drseus_start_tag:");
 
 	xil_printf("Starting program\n\r");
 	while(loop_count < 3) {
@@ -95,7 +95,9 @@ int main()
 			xil_printf("Fib overflow: %d, %d %d\n\r", FIB_COUNT, fib_out_i, fib_out_r);
 		}
 	}
-	cleanup_platform();
+
+	asm("drseus_end_tag:");
 	xil_printf("safeword ");
+	cleanup_platform();
 	return 0;
 }

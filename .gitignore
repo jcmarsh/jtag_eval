@@ -36,4 +36,5 @@
 *.size
 
 # Misc
+xsdb/instr_nostart.xsdb
 done
