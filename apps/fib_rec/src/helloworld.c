@@ -71,10 +71,22 @@ int main()
 	XGpio_SetDataDirection(&output, 1, 0x0);		//set first channel tristate buffer to output
 	init_platform();
 
+	print("Starting program\n\r");
+
+	// Run a few times to warm caches before test section
+	fib_out_i = fib_i(FIB_COUNT);
+	fib_out_r = fib_r(FIB_COUNT);
+	xil_printf("Result: %d, %d\n\r", fib_out_i, fib_out_r);
+	fib_out_i = fib_i(FIB_COUNT);
+	fib_out_r = fib_r(FIB_COUNT);
+	xil_printf("Result: %d, %d\n\r", fib_out_i, fib_out_r);
+	fib_out_i = fib_i(FIB_COUNT);
+	fib_out_r = fib_r(FIB_COUNT);
+	xil_printf("Result: %d, %d\n\r", fib_out_i, fib_out_r);
+
         /* Set a breakpoint on this label to let DrSEUS restart exectuion when readdy. */
         asm("drseus_start_tag:");
 
-	xil_printf("Starting program\n\r");
 	while(loop_count < 3) {
 	//while(1) {
 		xil_printf("Starting big loop: %d\n\r", loop_count++);

@@ -94,9 +94,11 @@ init_platform()
      */
     /* ps7_init();*/
     /* psu_init();*/
-    enable_caches();
+    enable_caches(); // Update print statement as well
     //disable_caches();
     init_uart();
+
+    print("Caches ALL ON\n");
 }
 
 void

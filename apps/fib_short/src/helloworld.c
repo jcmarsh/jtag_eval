@@ -17,11 +17,8 @@ Modifying to make a simple program to inject faults into.
 Meant to run faster than fib_rec - JM
 ****************************************************/
 
-#include <stdio.h>
-#include <stdlib.h>
 #include "platform.h"
 #include <xgpio.h>
-#include <unistd.h>
 
 int fib_i(int n) {
 	int ii;
@@ -45,10 +42,18 @@ int main() {
 
   init_platform();
 
+  print("Starting program\n\r");
+
+  // Run a few times to warm caches before test section
+  fib_out = fib_i(FIB_COUNT);
+  xil_printf("Result: %d, %d\n\r", FIB_COUNT, fib_out);
+  fib_out = fib_i(FIB_COUNT);
+  xil_printf("Result: %d, %d\n\r", FIB_COUNT, fib_out);
+  fib_out = fib_i(FIB_COUNT);
+  xil_printf("Result: %d, %d\n\r", FIB_COUNT, fib_out);
+
   /* Set a breakpoint on this label to let DrSEUS restart exectuion when readdy. */
   asm("drseus_start_tag:");
-
-  print("Starting program\n\r");
   
   fib_out = fib_i(FIB_COUNT);
   
