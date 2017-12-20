@@ -86,7 +86,7 @@ To set up a Pi to use as the OpenOCD device:
 * Connect with ssh - `ssh pi@raspberrypi.local`, password is `raspberry`
 * pi> sudo raspi-config - turn on ssh (5 -> P2) and change password as desired (1) (used `temppwd!`, must be "strong" to avoid warnings).
 * pi> sudo apt-get update
-* pi> sudo apt-get git libtool autotools-dev automake telnet python-pip
+* pi> sudo apt-get git libtool autotools-dev automake telnet python-pip bison flex
 * pi> sudo pip install parse
 * pi> git clone https://git.code.sf.net/p/openocd/code openocd-code
 * pi> cd openocd-code; ./bootstrap; ./configure --enable-sysfsgpio --enable-bcm2835gpio; make; sudo make install; cd ../
