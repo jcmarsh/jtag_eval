@@ -84,7 +84,7 @@ To set up a Pi to use as the OpenOCD device:
 * Add a file named `ssh` on the boot partition - Sets the Pi to enable ssh for the next boot.
 * Plug Pi into USB and Ethernet on host computer (share wired connection) - Used a laptop with Ubuntu 16.04.
 * Connect with ssh - `ssh pi@raspberrypi.local`, password is `raspberry`
-* pi> sudo raspi-config - turn on ssh (5 -> P2) and change password as desired (1) (used `temppwd!`, must be "strong" to avoid warnings).
+* pi> sudo raspi-config - turn on ssh (5 -> P2), change password as desired (1) (used `temppwd!`, must be "strong" to avoid warnings), update hostname to avoid conflicts with other raspberry pi's on the network (hostname.local will need to be updated in config files / code).
 * pi> sudo apt-get update
 * pi> sudo apt-get git libtool autotools-dev automake telnet python-pip bison flex
 * pi> sudo pip install parse
@@ -93,7 +93,7 @@ To set up a Pi to use as the OpenOCD device:
 * pi> git clone https://github.com/jcmarsh/jtag_eval.git - will change in the future
 * pi> cd jtag_eval; git checkout james_pi - will change in the future
 * pi> mkdir openOCD_cfg/mnt
-* ssh-copy-id pi@raspberrypi.local
+* ssh-copy-id pi@hostname.local
 
 ## Benchmark Code
 
