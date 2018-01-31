@@ -1,27 +1,12 @@
-################################################################################
-# Automatically-generated file. Do not edit!
-################################################################################
-
--include ../makefile.init
+CFLAGS = -Wall -O0 -g3
+INC = -I../../../basic_bsp/ps7_cortexa9_0/include -I../../common
+LD_SRCS += ../../common/lscript.ld
+LIB = -L../../../basic_bsp/ps7_cortexa9_0/lib
+SPEC = -specs=../../common/Xilinx.spec
+LIBS := -Wl,--start-group,-lxil,-lgcc,-lc,--end-group
 
 RM := rm -rf
 
-# All of the sources participating in the build are defined here
--include sources.mk
--include src/subdir.mk
--include subdir.mk
--include objects.mk
-
-ifneq ($(MAKECMDGOALS),clean)
-ifneq ($(strip $(S_UPPER_DEPS)),)
--include $(S_UPPER_DEPS)
-endif
-ifneq ($(strip $(C_DEPS)),)
--include $(C_DEPS)
-endif
-endif
-
--include ../makefile.defs
 
 # Add inputs and outputs from these tool invocations to the build variables 
 ELFSIZE += \
@@ -34,11 +19,27 @@ all: pre-build main-build
 # Main-build Target
 main-build: fib_short.elf secondary-outputs
 
+C_SRCS += ../../common/platform.c  \
+../src/helloworld.c
+
+OBJS += ../../common/platform.o \
+../src/helloworld.o
+
+C_DEPS += ../../common/platform.d \
+../src/helloworld.d
+
+%.o: %.c
+	@echo 'Building file: $<'
+	@echo 'Invoking: ARM v7 gcc compiler'
+	arm-none-eabi-gcc $(CFLAGS) -c -fmessage-length=0 -MT"$@" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard $(INC) -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -o "$@" "$<"
+	@echo 'Finished building: $<'
+	@echo ' '
+
 # Tool invocations
-fib_short.elf: $(OBJS) ../src/lscript.ld $(USER_OBJS)
+fib_short.elf: $(OBJS) $(LD_SRCS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: ARM v7 gcc linker'
-	arm-none-eabi-gcc -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -Wl,-build-id=none -specs=Xilinx.spec -Wl,-T -Wl,../src/lscript.ld -L../../../basic_bsp/ps7_cortexa9_0/lib -o "fib_short.elf" $(OBJS) $(USER_OBJS) $(LIBS)
+	arm-none-eabi-gcc -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -Wl,-build-id=none $(SPEC) -Wl,-T -Wl,$(LD_SRCS) $(LIB) -o "fib_short.elf" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -50,7 +51,7 @@ fib_short.elf.size: fib_short.elf
 
 # Other Targets
 clean:
-	-$(RM) $(EXECUTABLES)$(OBJS)$(S_UPPER_DEPS)$(C_DEPS)$(ELFSIZE) fib_short.elf
+	-$(RM) $(EXECUTABLES) $(OBJS) $(S_UPPER_DEPS) $(C_DEPS) $(ELFSIZE) fib_short.elf Xilinx.spec
 	-@echo ' '
 
 pre-build:
