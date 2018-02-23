@@ -44,11 +44,7 @@ int main() {
 
   print("Starting program\n\r");
 
-  // Run a few times to warm caches before test section
-  fib_out = fib_i(FIB_COUNT);
-  xil_printf("Result: %d, %d\n\r", FIB_COUNT, fib_out);
-  fib_out = fib_i(FIB_COUNT);
-  xil_printf("Result: %d, %d\n\r", FIB_COUNT, fib_out);
+  // Run one time to warm caches before test section
   fib_out = fib_i(FIB_COUNT);
   xil_printf("Result: %d, %d\n\r", FIB_COUNT, fib_out);
 
@@ -56,7 +52,9 @@ int main() {
   asm("drseus_start_tag:");
   
   fib_out = fib_i(FIB_COUNT);
-  
+  xil_printf("Result: %d, %d\n\r", FIB_COUNT, fib_out);
+
+  /*
   if (fib_out != FIB_RESULT) {
     xil_printf("Fibs do not match: %d, %d %d\n\r", FIB_COUNT, fib_out, FIB_RESULT);
     xil_printf("FAULT (%d, %d); %d\n\r", FIB_COUNT, FIB_RESULT, fib_out);
@@ -66,9 +64,10 @@ int main() {
   if (fib_out < 0) {
     xil_printf("Overflow: %d, %d %d\n\r", FIB_COUNT, fib_out);
   }
+  */
 
   asm("drseus_end_tag:");
   print("safeword ");
-  cleanup_platform();
+
   return 0;
 }
