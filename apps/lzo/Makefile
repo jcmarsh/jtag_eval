@@ -3,98 +3,70 @@
 #
 # Copyright (C) 1996-2017 Markus F.X.J. Oberhumer
 #
+CFLAGS = -s -Wall -O2 -fomit-frame-pointer
+INC = -I../../basic_bsp/ps7_cortexa9_0/include -I../common
+LD_SRCS += ../common/lscript.ld
+LIB = -L../../basic_bsp/ps7_cortexa9_0/lib
+SPEC = -specs=../common/Xilinx.spec
+LIBS := -Wl,--start-group,-lxil,-lgcc,-lc,--end-group
 
-PROGRAM = testmini
-SOURCES = testmini.c minilzo.c
+RM := rm -rf
 
-default:
-	@echo ""
-	@echo "Welcome to miniLZO. Please choose one of the following 'make' targets:"
-	@echo ""
-	@echo "    gcc:   gcc"
-	@echo "    unix:  hpux hpux9"
-	@echo "    win32: win32-bc win32-cygwin win32-dm win32-lccwin32"
-	@echo "           win32-intelc win32-mingw win32-vc win32-watcomc"
-	@echo "    dos32: dos32-djgpp2 dos32-wc"
-	@echo ""
+# Add inputs and outputs from these tool invocations to the build variables
+ELFSIZE += \
+lzo.elf.size \
 
+default: pre-build main-build
 
-# Make sure that minilzo.h, lzoconf.h and lzodefs.h are in the
-# current dircectory. Otherwise you may want to adjust CPPFLAGS.
-CPPFLAGS = -I. -I../include/lzo
+# Main-build Target
+main-build: testmini.elf secondary-outputs
 
-GCC_CFLAGS = -s -Wall -O2 -fomit-frame-pointer
+C_SRCS += ../common/platform.c  \
+./minilzo.c \
+./testmini.c
 
+OBJS += ../common/platform.o \
+./minilzo.o \
+./testmini.o
 
-#
-# gcc (generic)
-#
-
-gcc:
-	gcc $(CPPFLAGS) $(GCC_CFLAGS) -o $(PROGRAM) $(SOURCES)
-
-cc:
-	cc $(CPPFLAGS) -o $(PROGRAM) $(SOURCES)
+C_DEPS += ../common/platform.d \
+./minilzo.d \
+./testmini.d
 
 
-#
-# UNIX
-#
+%.o: %.c
+	@echo 'Building file: $<'
+	@echo 'Invoking: ARM v7 gcc compiler'
+	arm-none-eabi-gcc $(CFLAGS) -c -fmessage-length=0 -MT"$@" -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard $(INC) -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -o "$@" "$<"
+	@echo 'Finished building: $<'
+	@echo ' '
 
-hpux:
-	cc -Ae $(CPPFLAGS) -o $(PROGRAM) $(SOURCES)
+# Tool invocations
+lzo.elf: $(OBJS) $(LD_SRCS) $(USER_OBJS)
+	@echo 'Building target: $@'
+	@echo 'Invoking: ARM v7 gcc linker'
+	arm-none-eabi-gcc -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -Wl,-build-id=none $(SPEC) -Wl,-T -Wl,$(LD_SRCS) $(LIB) -o "lzo.elf" $(OBJS) $(USER_OBJS) $(LIBS)
+	@echo 'Finished building target: $@'
+	@echo ' '
 
-hpux9:
-	cc -Aa -D_HPUX_SOURCE $(CPPFLAGS) -o $(PROGRAM) $(SOURCES)
+lzo.elf.size: lzo.elf
+	@echo 'Invoking: ARM v7 Print Size'
+	arm-none-eabi-size lzo.elf  |tee "lzo.elf.size"
+	@echo 'Finished building: $@'
+	@echo ' '
 
-
-#
-# Windows (32-bit)
-#
-
-win32-borlandc win32-bc:
-	bcc32 -O2 -d -w -w-aus $(CPPFLAGS) $(SOURCES)
-
-win32-cygwin32 win32-cygwin:
-	gcc -mcygwin $(CPPFLAGS) $(GCC_CFLAGS) -o $(PROGRAM).exe $(SOURCES)
-
-win32-digitalmars win32-dm:
-	dmc -mn -o -w- $(CPPFLAGS) $(SOURCES)
-
-win32-intelc win32-ic:
-	icl -nologo -MT -W3 -O2 -GF $(CPPFLAGS) $(SOURCES)
-
-win32-lccwin32:
-	@echo "NOTE: need lcc 2002-07-25 or newer, older versions have bugs"
-	lc -A -unused -O $(CPPFLAGS) $(SOURCES)
-
-win32-mingw32 win32-mingw:
-	gcc -mno-cygwin $(CPPFLAGS) $(GCC_CFLAGS) -o $(PROGRAM).exe $(SOURCES)
-
-win32-visualc win32-vc:
-	cl -nologo -MT -W3 -O2 -GF $(CPPFLAGS) $(SOURCES)
-
-win32-watcomc win32-wc:
-	wcl386 -bt=nt -zq -mf -5r -zc -w5 -oneatx $(CPPFLAGS) $(SOURCES)
-
-
-#
-# DOS (32-bit)
-#
-
-dos32-djgpp2 dos32-dj2:
-	gcc $(CPPFLAGS) $(GCC_CFLAGS) -o $(PROGRAM).exe $(SOURCES)
-
-dos32-watcomc dos32-wc:
-	wcl386 -zq -mf -bt=dos -l=dos4g -5r -ox -zc $(CPPFLAGS) $(SOURCES)
-
-
-#
-# other targets
-#
-
+# Other Targets
 clean:
-	rm -f $(PROGRAM) $(PROGRAM).exe $(PROGRAM).map $(PROGRAM).tds
-	rm -f *.err *.o *.obj
+	-$(RM) $(EXECUTABLES) $(OBJS) $(S_UPPER_DEPS) $(C_DEPS) $(ELFSIZE) lzo.elf Xilinx.spec
+	-@echo ' '
 
-.PHONY: default clean
+pre-build:
+	-a9-linaro-pre-build-step
+	-@echo ' '
+
+secondary-outputs: $(ELFSIZE)
+
+.PHONY: all clean dependents
+.SECONDARY: main-build pre-build
+
+-include ../makefile.targets
