@@ -28,6 +28,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "platform.h"
+#include <xgpio.h>
 
 
 /*************************************************************************
@@ -71,32 +73,13 @@ static HEAP_ALLOC(wrkmem, LZO1X_1_MEM_COMPRESS);
 /*************************************************************************
 //
 **************************************************************************/
-
-int main(int argc, char *argv[])
-{
+int lzo_test(void) {
     int r;
     lzo_uint in_len;
     lzo_uint out_len;
     lzo_uint new_len;
 
-    if (argc < 0 && argv == NULL)   /* avoid warning about unused args */
-        return 0;
-
-    printf("\nLZO real-time data compression library (v%s, %s).\n",
-           lzo_version_string(), lzo_version_date());
-    printf("Copyright (C) 1996-2017 Markus Franz Xaver Johannes Oberhumer\nAll Rights Reserved.\n\n");
-
-
-/*
- * Step 1: initialize the LZO library
- */
-    if (lzo_init() != LZO_E_OK)
-    {
-        printf("internal error - lzo_init() failed !!!\n");
-        printf("(this usually indicates a compiler bug - try recompiling\nwithout optimizations, and enable '-DLZO_DEBUG' for diagnostics)\n");
-        return 3;
-    }
-
+    // Something other than zeros? Maybe random? -JM
 /*
  * Step 2: prepare the input block that will get compressed.
  *         We just fill it with zeros in this example program,
@@ -144,5 +127,37 @@ int main(int argc, char *argv[])
     return 0;
 }
 
+
+int main(int argc, char *argv[])
+{
+    if (argc < 0 && argv == NULL)   /* avoid warning about unused args */
+        return 0;
+
+    printf("\nLZO real-time data compression library (v%s, %s).\n",
+           lzo_version_string(), lzo_version_date());
+    printf("Copyright (C) 1996-2017 Markus Franz Xaver Johannes Oberhumer\nAll Rights Reserved.\n\n");
+
+    // Init zybo platform
+    init_platform();
+
+/*
+ * Step 1: initialize the LZO library
+ */
+    if (lzo_init() != LZO_E_OK)
+    {
+        printf("internal error - lzo_init() failed !!!\n");
+        printf("(this usually indicates a compiler bug - try recompiling\nwithout optimizations, and enable '-DLZO_DEBUG' for diagnostics)\n");
+        return 3;
+    }
+
+
+    // Loop this twice, tags on second... function? Or loop after init? -JM
+    lzo_test();
+
+    asm("drseus_start_tag:");
+    lzo_test();
+    asm("drseus_end_tag:");
+    print("safeword ");
+}
 
 /* vim:set ts=4 sw=4 et: */
