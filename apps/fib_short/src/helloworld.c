@@ -50,8 +50,9 @@ int main() {
 
   /* Set a breakpoint on this label to let DrSEUS restart exectuion when readdy. */
   asm("drseus_start_tag:");
-  
   fib_out = fib_i(FIB_COUNT);
+  asm("drseus_end_tag:");
+
   xil_printf("Result: %d, %d\n\r", FIB_COUNT, fib_out);
 
   /*
@@ -66,7 +67,6 @@ int main() {
   }
   */
 
-  asm("drseus_end_tag:");
   print("safeword ");
 
   return 0;

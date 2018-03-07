@@ -53,7 +53,8 @@
  * is not possible.
  */
 
-#define IN_LEN      (128*1024ul)
+//#define IN_LEN      (128*1024ul)
+#define IN_LEN      (32*128ul)
 #define OUT_LEN     (IN_LEN + IN_LEN / 16 + 64 + 3)
 
 static unsigned char __LZO_MMODEL in  [ IN_LEN ];
@@ -73,10 +74,8 @@ static HEAP_ALLOC(wrkmem, LZO1X_1_MEM_COMPRESS);
 /*************************************************************************
 //
 **************************************************************************/
-int lzo_test(void) {
+int lzo_test(lzo_uint* in_len, lzo_uint* out_len) {
     int r;
-    lzo_uint in_len;
-    lzo_uint out_len;
     lzo_uint new_len;
 
     // Something other than zeros? Maybe random? -JM
@@ -85,16 +84,16 @@ int lzo_test(void) {
  *         We just fill it with zeros in this example program,
  *         but you would use your real-world data here.
  */
-    in_len = IN_LEN;
-    lzo_memset(in,0,in_len);
+    *in_len = IN_LEN;
+    lzo_memset(in,0,*in_len);
 
 /*
  * Step 3: compress from 'in' to 'out' with LZO1X-1
  */
-    r = lzo1x_1_compress(in,in_len,out,&out_len,wrkmem);
-    if (r == LZO_E_OK)
-        printf("compressed %lu bytes into %lu bytes\n",
-            (unsigned long) in_len, (unsigned long) out_len);
+    r = lzo1x_1_compress(in,*in_len,out,out_len,wrkmem);
+    if (r == LZO_E_OK) { }
+      //printf("compressed %lu bytes into %lu bytes\n",
+      //      (unsigned long) in_len, (unsigned long) out_len);
     else
     {
         /* this should NEVER happen */
@@ -102,20 +101,20 @@ int lzo_test(void) {
         return 2;
     }
     /* check for an incompressible block */
-    if (out_len >= in_len)
+    if (*out_len >= *in_len)
     {
         printf("This block contains incompressible data.\n");
-        return 0;
+        return 3;
     }
 
 /*
  * Step 4: decompress again, now going from 'out' to 'in'
  */
-    new_len = in_len;
-    r = lzo1x_decompress(out,out_len,in,&new_len,NULL);
-    if (r == LZO_E_OK && new_len == in_len)
-        printf("decompressed %lu bytes back into %lu bytes\n",
-            (unsigned long) out_len, (unsigned long) in_len);
+    new_len = *in_len;
+    r = lzo1x_decompress(out,*out_len,in,&new_len,NULL);
+    if (r == LZO_E_OK && new_len == *in_len) { }
+        //printf("decompressed %lu bytes back into %lu bytes\n",
+        //    (unsigned long) out_len, (unsigned long) in_len);
     else
     {
         /* this should NEVER happen */
@@ -123,13 +122,17 @@ int lzo_test(void) {
         return 1;
     }
 
-    printf("\nminiLZO simple compression test passed.\n");
+    //printf("\nminiLZO simple compression test passed.\n");
     return 0;
 }
 
 
 int main(int argc, char *argv[])
 {
+    int ret_val = 0;
+    lzo_uint in_len;
+    lzo_uint out_len;
+
     if (argc < 0 && argv == NULL)   /* avoid warning about unused args */
         return 0;
 
@@ -152,11 +155,26 @@ int main(int argc, char *argv[])
 
 
     // Loop this twice, tags on second... function? Or loop after init? -JM
-    lzo_test();
+    ret_val = lzo_test(&in_len, &out_len);
+    if (ret_val == 0) {
+        printf("compressed %lu bytes into %lu bytes\n",
+               (unsigned long) in_len, (unsigned long) out_len);
+        printf("decompressed %lu bytes back into %lu bytes\n",
+               (unsigned long) out_len, (unsigned long) in_len);
+        printf("\nminiLZO simple compression test passed.\n");
+    }
 
     asm("drseus_start_tag:");
-    lzo_test();
+    lzo_test(&in_len, &out_len);
     asm("drseus_end_tag:");
+    if (ret_val == 0) {
+        printf("compressed %lu bytes into %lu bytes\n",
+               (unsigned long) in_len, (unsigned long) out_len);
+        printf("decompressed %lu bytes back into %lu bytes\n",
+               (unsigned long) out_len, (unsigned long) in_len);
+        printf("\nminiLZO simple compression test passed.\n");
+    }
+
     print("safeword ");
 }
 
