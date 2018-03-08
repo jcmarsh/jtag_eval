@@ -54,7 +54,7 @@
  */
 
 //#define IN_LEN      (128*1024ul)
-#define IN_LEN      (32*128ul)
+#define IN_LEN      (16*1024ul)
 #define OUT_LEN     (IN_LEN + IN_LEN / 16 + 64 + 3)
 
 static unsigned char __LZO_MMODEL in  [ IN_LEN ];
@@ -154,7 +154,7 @@ int main(int argc, char *argv[])
     }
 
 
-    // Loop this twice, tags on second... function? Or loop after init? -JM
+    // Run once for warmup, tags on second - JM
     ret_val = lzo_test(&in_len, &out_len);
     if (ret_val == 0) {
         printf("compressed %lu bytes into %lu bytes\n",
@@ -165,7 +165,7 @@ int main(int argc, char *argv[])
     }
 
     asm("drseus_start_tag:");
-    lzo_test(&in_len, &out_len);
+    ret_val = lzo_test(&in_len, &out_len);
     asm("drseus_end_tag:");
     if (ret_val == 0) {
         printf("compressed %lu bytes into %lu bytes\n",
@@ -175,7 +175,7 @@ int main(int argc, char *argv[])
         printf("\nminiLZO simple compression test passed.\n");
     }
 
-    print("safeword ");
+    printf("safeword ");
 }
 
 /* vim:set ts=4 sw=4 et: */
