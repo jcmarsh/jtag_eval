@@ -19,7 +19,7 @@ lzo.elf.size \
 default: pre-build main-build
 
 # Main-build Target
-main-build: testmini.elf secondary-outputs
+main-build: lzo.elf secondary-outputs
 
 C_SRCS += ../common/platform.c  \
 ./minilzo.c \
