@@ -7,10 +7,19 @@ For the Zybo board, Digilent has a good tutorial on setting up Xilinx tools and 
 
 ## Dependencies
 
-* Download and install one of the below:
+* Download and install one of the following:
   * Xilinx Vivado - Full suite for FPGA and Core programming
   * Xilinx SDK - Eclipse-like development environment (use the .bit located in this repo for the FPGA)
   * Xilinx CLI - Minimal tool set for uploading to Zybo board (use the .bit located in this repo for the FPGA)
+  
+* OpenOCD <- runs on the embedded board to control the JTAG interface
+
+* GDB for arm-none-eabi with python support <- previously used OpenOCD to disassemble ARM commands, but this feature is not well supported. The arm-none-eabi-gdb from Ubuntu repos isn't compiled with python support, so must build from source:
+
+      > git clone git://sourceware.org/git/binutils-gdb.git
+      > cd binutils-gdb; mkdir build; cd build
+      > ../configure --target=arm-none-eabi --with-python
+      > make; sudo make install
 
 ## Basic BSP (Board Support Package)
 This board support package is for using the 0th ARM core of the Zynq-70X0 chip on the Zybo board.
