@@ -54,11 +54,13 @@
  */
 
 //#define IN_LEN      (128*1024ul)
-#define IN_LEN      (16*1024ul)
+//#define IN_LEN      (16*1024ul)
+#define IN_LEN      (1*1024ul)
 #define OUT_LEN     (IN_LEN + IN_LEN / 16 + 64 + 3)
 
 static unsigned char __LZO_MMODEL in  [ IN_LEN ];
 static unsigned char __LZO_MMODEL out [ OUT_LEN ];
+static unsigned char __LZO_MMODEL cmp [ OUT_LEN ];
 
 
 /* Work-memory needed for compression. Allocate memory in units
@@ -164,6 +166,9 @@ int main(int argc, char *argv[])
         printf("\nminiLZO simple compression test passed.\n");
     }
 
+    // Save data to test against fault injection
+    memcpy(cmp, out, in_len);
+
     asm("drseus_start_tag:");
     ret_val = lzo_test(&in_len, &out_len);
     asm("drseus_end_tag:");
@@ -173,6 +178,12 @@ int main(int argc, char *argv[])
         printf("decompressed %lu bytes back into %lu bytes\n",
                (unsigned long) out_len, (unsigned long) in_len);
         printf("\nminiLZO simple compression test passed.\n");
+    }
+
+    // check if results are the same
+    ret_val = memcmp(cmp, out, in_len);
+    if (ret_val != 0) {
+      printf("Data does not match with warm-up run\n");
     }
 
     printf("safeword ");
