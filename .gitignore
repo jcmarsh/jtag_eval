@@ -39,3 +39,5 @@
 xsdb/instr_nostart.xsdb
 done
 source_me.sh
+openOCD_cfg/mnt/*
+!openOCD_cfg/mnt/.gitkeep
