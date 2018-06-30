@@ -243,6 +243,14 @@ void Xpm_SetEvents(s32 PmcrCfg)
 		XPM_EVENT_DATA_CACHEACCESS,
 		XPM_EVENT_DATA_TLBREFILL
 	},
+	{
+          0x04U,
+          0x03U,
+          0x14U,
+          0x01U,
+          0x16U,
+          0x17U
+	},
 	};
 	const u32 *ptr = PmcrEvents[PmcrCfg];
 
@@ -255,6 +263,7 @@ void Xpm_SetEvents(s32 PmcrCfg)
 
 		/* Set the event */
 		mtcp(XREG_CP15_EVENT_TYPE_SEL, ptr[Counter]);
+                printf("Sec counter %d to 0x%02X\n", Counter, ptr[Counter]);
 	}
 
 	Xpm_ResetEventCounters();

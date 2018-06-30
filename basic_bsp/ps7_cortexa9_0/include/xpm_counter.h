@@ -551,6 +551,7 @@ extern "C" {
 #define XPM_CNTRCFG9	8
 #define XPM_CNTRCFG10	9
 #define XPM_CNTRCFG11	10
+#define XPM_CNTRCFGCUST	11
 
 /**************************** Type Definitions ******************************/
 
