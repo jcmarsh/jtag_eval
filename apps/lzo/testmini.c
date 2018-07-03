@@ -31,6 +31,8 @@
 #include "platform.h"
 #include <xgpio.h>
 
+// Don't always include this!
+#include "kepler_data.h"
 
 /*************************************************************************
 // This program shows the basic usage of the LZO library.
@@ -54,8 +56,10 @@
  */
 
 //#define IN_LEN      (128*1024ul)
+//#define IN_LEN      (64*1024ul)
+#define IN_LEN      (32*1024ul)
 //#define IN_LEN      (16*1024ul)
-#define IN_LEN      (1*1024ul)
+//#define IN_LEN      (1*1024ul)
 #define OUT_LEN     (IN_LEN + IN_LEN / 16 + 64 + 3)
 
 static unsigned char __LZO_MMODEL in  [ IN_LEN ];
@@ -79,15 +83,6 @@ static HEAP_ALLOC(wrkmem, LZO1X_1_MEM_COMPRESS);
 int lzo_test(lzo_uint* in_len, lzo_uint* out_len) {
     int r;
     lzo_uint new_len;
-
-    // Something other than zeros? Maybe random? -JM
-/*
- * Step 2: prepare the input block that will get compressed.
- *         We just fill it with zeros in this example program,
- *         but you would use your real-world data here.
- */
-    *in_len = IN_LEN;
-    lzo_memset(in,0,*in_len);
 
 /*
  * Step 3: compress from 'in' to 'out' with LZO1X-1
@@ -145,9 +140,9 @@ int main(int argc, char *argv[])
     // Init zybo platform
     init_platform();
 
-/*
- * Step 1: initialize the LZO library
- */
+    /*
+     * Step 1: initialize the LZO library
+     */
     if (lzo_init() != LZO_E_OK)
     {
         printf("internal error - lzo_init() failed !!!\n");
@@ -155,6 +150,37 @@ int main(int argc, char *argv[])
         return 3;
     }
 
+
+    /*
+     * Step 2: prepare the input block that will get compressed.
+     *         We just fill it with zeros in this example program,
+     *         but you would use your real-world data here.
+     */
+    in_len = IN_LEN;
+    // Set to all 0's
+    /*
+    lzo_memset(in,0,in_len);
+    printf("Setting input to all 0's\n");
+    */
+
+    // Set to all random... if I'm doing this right
+    // All random is incompressible, so try making some data repeated
+    /*
+    for (int i = 0; i < in_len / 4; i = i + 4) {
+        in[i] = rand() % 256;
+        in[i+1] = in[i];
+        in[i+2] = in[i];
+        in[i+3] = in[i];
+    }
+    printf("Setting input to random: 0x%02X 0x%02X 0x%02X 0x%02X\n", in[0], in[1], in[2], in[3]);
+    printf("Setting input to random: 0x%02X 0x%02X 0x%02X 0x%02X\n", in[0], in[4], in[8], in[12]);
+    */
+
+    // Set data to be from the kepler_data array
+    printf("Using kepler data, no more that 32K: %d\n", in_len);
+    memcpy(in, kepler_data, in_len);
+    printf("Setting input to Kepler: 0x%02X 0x%02X 0x%02X 0x%02X\n", in[0], in[1], in[2], in[3]);
+    printf("Setting input to Kepler: 0x%02X 0x%02X 0x%02X 0x%02X\n", in[4], in[5], in[6], in[7]);
 
     // Run once for warmup, tags on second - JM
     ret_val = lzo_test(&in_len, &out_len);
