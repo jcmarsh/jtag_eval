@@ -31,6 +31,9 @@
 #include "platform.h"
 #include <xgpio.h>
 
+// To flush cache
+#include <xil_cache_l.h>
+
 // Don't always include this!
 #include "kepler_data.h"
 
@@ -194,6 +197,8 @@ int main(int argc, char *argv[])
 
     // Save data to test against fault injection
     memcpy(cmp, out, in_len);
+
+    // Xil_L2CacheFlush();
 
     asm("drseus_start_tag:");
     ret_val = lzo_test(&in_len, &out_len);
