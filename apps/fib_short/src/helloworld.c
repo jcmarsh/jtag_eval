@@ -20,6 +20,9 @@ Meant to run faster than fib_rec - JM
 #include "platform.h"
 #include <xgpio.h>
 
+// For Cache Flush
+#include <xil_cache_l.h>
+
 int fib_i(int n) {
 	int ii;
 	int prev_0 = 1;
@@ -47,6 +50,8 @@ int main() {
   // Run one time to warm caches before test section
   fib_out = fib_i(FIB_COUNT);
   xil_printf("Result: %d, %d\n\r", FIB_COUNT, fib_out);
+
+  // Xil_L2CacheFlush();
 
   /* Set a breakpoint on this label to let DrSEUS restart exectuion when readdy. */
   asm("drseus_start_tag:");

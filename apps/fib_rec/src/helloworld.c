@@ -26,6 +26,9 @@ crash the system... guessing it overwrote the stack.
 #include "sleep.h"
 #include <unistd.h>
 
+// For Cache Flush
+#include <xil_cache_l.h>
+
 int fib_i(int n) {
 	int ii;
 	int prev_0 = 1;
@@ -65,6 +68,8 @@ int main()
 	fib_out_i = fib_i(FIB_COUNT);
 	fib_out_r = fib_r(FIB_COUNT);
 	xil_printf("Result: %d, %d\n\r", fib_out_i, fib_out_r);
+
+        // Xil_L2CacheFlush();
 
         /* Set a breakpoint on this label to let DrSEUS restart exectuion when ready. */
         asm("drseus_start_tag:");
