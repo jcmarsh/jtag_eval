@@ -217,6 +217,8 @@ int main(int argc, char *argv[])
       printf("Data does not match with warm-up run\n");
     }
 
+    exit_platform();
+
     printf("safeword ");
 }
 
