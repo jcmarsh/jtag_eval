@@ -186,6 +186,7 @@ int main(int argc, char *argv[])
     printf("Setting input to Kepler: 0x%02X 0x%02X 0x%02X 0x%02X\n", in[4], in[5], in[6], in[7]);
 
     // Run once for warmup, tags on second - JM
+    /*
     ret_val = lzo_test(&in_len, &out_len);
     if (ret_val == 0) {
         printf("compressed %lu bytes into %lu bytes\n",
@@ -194,11 +195,12 @@ int main(int argc, char *argv[])
                (unsigned long) out_len, (unsigned long) in_len);
         printf("\nminiLZO simple compression test passed.\n");
     }
+    */
 
     // Save data to test against fault injection
-    memcpy(cmp, out, in_len);
+    //memcpy(cmp, out, in_len);
 
-    // Xil_L2CacheFlush();
+    Xil_L2CacheFlush();
 
     asm("drseus_start_tag:");
     ret_val = lzo_test(&in_len, &out_len);
@@ -212,10 +214,12 @@ int main(int argc, char *argv[])
     }
 
     // check if results are the same
+    /*
     ret_val = memcmp(cmp, out, in_len);
     if (ret_val != 0) {
       printf("Data does not match with warm-up run\n");
     }
+    */
 
     exit_platform();
 

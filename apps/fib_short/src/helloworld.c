@@ -48,10 +48,12 @@ int main() {
   print("Starting program\n\r");
 
   // Run one time to warm caches before test section
+  /*
   fib_out = fib_i(FIB_COUNT);
   xil_printf("Result: %d, %d\n\r", FIB_COUNT, fib_out);
+  */
 
-  // Xil_L2CacheFlush();
+  Xil_L2CacheFlush();
 
   /* Set a breakpoint on this label to let DrSEUS restart exectuion when readdy. */
   asm("drseus_start_tag:");
