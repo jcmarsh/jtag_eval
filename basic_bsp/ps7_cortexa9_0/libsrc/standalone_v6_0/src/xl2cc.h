@@ -125,7 +125,8 @@ extern "C" {
 #define XPS_L2CC_AUX_NSIC_MASK		0x08000000U	/* Non-secure interrupt access control */
 #define XPS_L2CC_AUX_NSLE_MASK		0x04000000U	/* Non-secure lockdown enable */
 #define XPS_L2CC_AUX_CRP_MASK		0x02000000U	/* Cache replacement policy */
-#define XPS_L2CC_AUX_FWE_MASK		0x01800000U	/* Force write allocate */
+//#define XPS_L2CC_AUX_FWE_MASK		0x01800000U	/* Force write allocate */
+#define XPS_L2CC_AUX_FWE_MASK		0x01000000U	/* Force write allocate */
 #define XPS_L2CC_AUX_SAOE_MASK		0x00400000U	/* Shared attribute override enable */
 #define XPS_L2CC_AUX_PE_MASK		0x00200000U	/* Parity enable */
 #define XPS_L2CC_AUX_EMBE_MASK		0x00100000U	/* Event monitor bus enable */
@@ -163,7 +164,8 @@ extern "C" {
 /* Debug control bits */
 #define XPS_L2CC_DEBUG_SPIDEN_MASK	0x00000004U	/* Debug SPIDEN bit */
 #define XPS_L2CC_DEBUG_DWB_MASK		0x00000002U	/* Debug DWB bit, forces write through */
-#define XPS_L2CC_DEBUG_DCL_MASK		0x00000002U	/* Debug DCL bit, disables cache line fill */
+//#define XPS_L2CC_DEBUG_DCL_MASK		0x00000002U	/* Debug DCL bit, disables cache line fill */
+#define XPS_L2CC_DEBUG_DCL_MASK		0x00000001U	/* Debug DCL bit, disables cache line fill */
 
 #ifdef __cplusplus
 }
