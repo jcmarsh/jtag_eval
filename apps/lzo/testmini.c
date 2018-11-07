@@ -58,9 +58,9 @@
  * is not possible.
  */
 
-//#define IN_LEN      (128*1024ul)
+#define IN_LEN      (128*1024ul)
 //#define IN_LEN      (64*1024ul)
-#define IN_LEN      (32*1024ul)
+//#define IN_LEN      (32*1024ul)
 //#define IN_LEN      (16*1024ul)
 //#define IN_LEN      (1*1024ul)
 #define OUT_LEN     (IN_LEN + IN_LEN / 16 + 64 + 3)
