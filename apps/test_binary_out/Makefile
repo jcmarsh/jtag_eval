@@ -20,7 +20,7 @@ binary_output.d
 USER_OBJS :=
 LIBS := -Wl,--start-group,-lxil,-lgcc,-lc,--end-group
 
-all: input_file test_binary_output.elf
+all: input_file test_binary_out.elf
 
 native: Makefile binary_output.c input_file
 	gcc -o binary_output -static -g binary_output.c
@@ -35,16 +35,16 @@ input_file: input_small.pgm
 	@echo 'Finished building: $<'
 	@echo ' '
 
-test_binary_output.elf: $(OBJS) $(LD_SRCS) $(USER_OBJS)
+test_binary_out.elf: $(OBJS) $(LD_SRCS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: ARM v7 gcc linker'
-	arm-none-eabi-gcc -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -Wl,-build-id=none $(SPEC) -Wl,-T -Wl,$(LD_SRCS) $(LIB) -o "test_binary_output.elf" $(OBJS) $(USER_OBJS) $(LIBS)
+	arm-none-eabi-gcc -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -Wl,-build-id=none $(SPEC) -Wl,-T -Wl,$(LD_SRCS) $(LIB) -o "test_binary_out.elf" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	rm -rf $(EXECUTABLES) $(OBJS) $(S_UPPER_DEPS) $(C_DEPS) $(ELFSIZE) test_binary_output.elf binary_output Xilinx.spec input_small.h
+	rm -rf $(EXECUTABLES) $(OBJS) $(S_UPPER_DEPS) $(C_DEPS) $(ELFSIZE) test_binary_out.elf binary_output Xilinx.spec input_small.h
 	-@echo ' '
 
 pre-build:

@@ -99,10 +99,16 @@ main(int argc, char *argv[])
   int    x_size, y_size;
 
   init_platform();
- 
+
+  printf("Testing binary output from the Zybo\n");
+
+  Xil_L2CacheFlush();
+  asm("drseus_start_tag:");
   get_image(&in,&x_size,&y_size);
 
   put_image(in,x_size,y_size);
+  asm("drseus_end_tag:");
+  Xil_L2CacheFlush();
 
   exit_platform();
 
