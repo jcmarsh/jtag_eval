@@ -58,8 +58,8 @@
  * is not possible.
  */
 
-#define IN_LEN      (128*1024ul)
-//#define IN_LEN      (64*1024ul)
+//#define IN_LEN      (128*1024ul)
+#define IN_LEN      (64*1024ul)
 //#define IN_LEN      (32*1024ul)
 //#define IN_LEN      (16*1024ul)
 //#define IN_LEN      (1*1024ul)
@@ -201,10 +201,11 @@ int main(int argc, char *argv[])
     //memcpy(cmp, out, in_len);
 
     Xil_L2CacheFlush();
-
     asm("drseus_start_tag:");
     ret_val = lzo_test(&in_len, &out_len);
     asm("drseus_end_tag:");
+    Xil_L2CacheFlush();
+
     if (ret_val == 0) {
         printf("compressed %lu bytes into %lu bytes\n",
                (unsigned long) in_len, (unsigned long) out_len);
