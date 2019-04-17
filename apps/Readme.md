@@ -53,7 +53,13 @@ This benchmark should expose how this can lead to differing results.
 
 /chielle:
 
-/lzo:
+/lzo: Runs LZO to compress and then decompress some data from the Kepler mission.
+TODO: Needs to output something to show that the data wasn't corrupted.
+
+/lzo_loop: Similar to lzo, but runs in a longer to loop in an attempt to show timing differences between runs with prefetching enabled or disabled.
+Should NOT be run with the normal DrSEUs scripts.
+
+/global_timer_test: Just trying to figure out how to use the ARM global timer and relate it back to wall time.
 
 /tambara:
 
