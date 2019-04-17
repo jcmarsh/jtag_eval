@@ -30,6 +30,7 @@
 #include <stdlib.h>
 #include "platform.h"
 #include <xgpio.h>
+#include <xtime_l.h>
 
 // To flush cache
 #include <xil_cache_l.h>
@@ -127,6 +128,8 @@ int lzo_test(lzo_uint* in_len, lzo_uint* out_len) {
 }
 
 #define LOOPS 100
+// CPU Clock / 2
+#define TIMER_MHZ 333
 
 int main(int argc, char *argv[])
 {
@@ -168,15 +171,20 @@ int main(int argc, char *argv[])
     printf("Setting input to Kepler: 0x%02X 0x%02X 0x%02X 0x%02X\n", in[0], in[1], in[2], in[3]);
     printf("Setting input to Kepler: 0x%02X 0x%02X 0x%02X 0x%02X\n", in[4], in[5], in[6], in[7]);
 
+    uint64_t old_time, new_time, delta;
+    XTime_SetTime(0);
     // Not sure if the asm tags are needed
-    asm("drseus_start_tag:");
+
     Xil_L2CacheFlush();
+    XTime_GetTime(&old_time);
     for (int i = 0; i < LOOPS; i++) {
         Xil_L2CacheFlush();
         ret_val = lzo_test(&in_len, &out_len);
     }
-    Xil_L2CacheFlush();
-    asm("drseus_end_tag:");
+    XTime_GetTime(&new_time);
+    delta = new_time - old_time;
+    printf("LZO 64KB timed (%d loops): %llu - %llu = %llu\n", LOOPS, new_time, old_time, delta);
+    printf("Delta in ms: %llu\n", delta / TIMER_MHZ);
 
     if (ret_val == 0) {
         printf("compressed %lu bytes into %lu bytes\n",

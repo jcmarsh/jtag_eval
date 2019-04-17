@@ -12,14 +12,10 @@ LIBS := -Wl,--start-group,-lxil,-lgcc,-lc,--end-group
 
 RM := rm -rf
 
-# Add inputs and outputs from these tool invocations to the build variables
-ELFSIZE += \
-lzo.elf.size \
-
 default: pre-build main-build
 
 # Main-build Target
-main-build: lzo.elf secondary-outputs
+main-build: lzo_loop.elf
 
 C_SRCS += ../common/platform.c  \
 ./minilzo.c \
@@ -42,31 +38,21 @@ C_DEPS += ../common/platform.d \
 	@echo ' '
 
 # Tool invocations
-lzo.elf: $(OBJS) $(LD_SRCS) $(USER_OBJS)
+lzo_loop.elf: $(OBJS) $(LD_SRCS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: ARM v7 gcc linker'
-	arm-none-eabi-gcc -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -Wl,-build-id=none $(SPEC) -Wl,-T -Wl,$(LD_SRCS) $(LIB) -o "lzo.elf" $(OBJS) $(USER_OBJS) $(LIBS)
+	arm-none-eabi-gcc -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -Wl,-build-id=none $(SPEC) -Wl,-T -Wl,$(LD_SRCS) $(LIB) -o "lzo_loop.elf" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
-	@echo ' '
-
-lzo.elf.size: lzo.elf
-	@echo 'Invoking: ARM v7 Print Size'
-	arm-none-eabi-size lzo.elf  |tee "lzo.elf.size"
-	@echo 'Finished building: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) $(EXECUTABLES) $(OBJS) $(S_UPPER_DEPS) $(C_DEPS) $(ELFSIZE) lzo.elf Xilinx.spec
+	-$(RM) $(EXECUTABLES) $(OBJS) $(S_UPPER_DEPS) $(C_DEPS) $(ELFSIZE) lzo_loop.elf Xilinx.spec
 	-@echo ' '
 
 pre-build:
 	-a9-linaro-pre-build-step
 	-@echo ' '
 
-secondary-outputs: $(ELFSIZE)
-
 .PHONY: all clean dependents
 .SECONDARY: main-build pre-build
-
--include ../makefile.targets
