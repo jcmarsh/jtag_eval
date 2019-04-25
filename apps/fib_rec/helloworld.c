@@ -92,6 +92,8 @@ int main()
         }
         */
 
+        exit_platform();
+
         xil_printf("safeword ");
 
         return 0;
