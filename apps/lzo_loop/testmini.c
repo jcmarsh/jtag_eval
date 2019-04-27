@@ -30,7 +30,6 @@
 #include <stdlib.h>
 #include "platform.h"
 #include <xgpio.h>
-#include <xtime_l.h>
 
 // To flush cache
 #include <xil_cache_l.h>
@@ -80,6 +79,39 @@ static unsigned char __LZO_MMODEL cmp [ OUT_LEN ];
 
 static HEAP_ALLOC(wrkmem, LZO1X_1_MEM_COMPRESS);
 
+typedef unsigned long long timestamp_t;
+timestamp_t generate_timestamp( void ) {
+  unsigned int pmccntr;
+  unsigned int pmuseren;
+  unsigned int pmcntenset;
+
+  // Read the user mode perf monitor counter access permissions.
+  asm volatile ("mrc p15, 0, %0, c9, c14, 0" : "=r" (pmuseren));
+  if (pmuseren & 1) {  // Allows reading perfmon counters for user mode code.
+    asm volatile ("mrc p15, 0, %0, c9, c12, 1" : "=r" (pmcntenset));
+    if (pmcntenset & 0x80000000ul) {  // Is it counting?
+      asm volatile ("mrc p15, 0, %0, c9, c13, 0" : "=r" (pmccntr));
+      // The counter is set up to count every 64th cycle
+      // return (((timestamp_t) pmccntr) * 64);  // Should optimize to << 6
+      return (((timestamp_t) pmccntr));
+    } else {
+      printf("Fail #2\n");
+    }
+  } else {
+    printf("Fail #1\n");
+  }
+  //  printf("Arm performance monitor not enabled (check for module)\n");
+  return 0;
+}
+
+float diff_time(timestamp_t current, timestamp_t last, float cpu_mhz) {
+  if (current > last) {
+    return (current - last) / cpu_mhz;
+  } else {
+    //return ((((timestamp_t) UINT_MAX * 64) - last) + current) / cpu_mhz;
+    return ((((timestamp_t) UINT_MAX) - last) + current) / cpu_mhz;
+  }
+}
 
 /*************************************************************************
 //
@@ -130,6 +162,7 @@ int lzo_test(lzo_uint* in_len, lzo_uint* out_len) {
 #define LOOPS 100
 // CPU Clock / 2
 #define TIMER_MHZ 333
+#define PERF_DEF_OPTS (1 | 16)
 
 int main(int argc, char *argv[])
 {
@@ -171,20 +204,28 @@ int main(int argc, char *argv[])
     printf("Setting input to Kepler: 0x%02X 0x%02X 0x%02X 0x%02X\n", in[0], in[1], in[2], in[3]);
     printf("Setting input to Kepler: 0x%02X 0x%02X 0x%02X 0x%02X\n", in[4], in[5], in[6], in[7]);
 
-    uint64_t old_time, new_time, delta;
-    XTime_SetTime(0);
-    // Not sure if the asm tags are needed
+    uint64_t old_time, new_time;
+    float delta;
+    //XTime_SetTime(0);
 
-    Xil_L2CacheFlush();
-    XTime_GetTime(&old_time);
+    /* Enable user-mode access to counters. */
+    asm volatile("mcr p15, 0, %0, c9, c14, 0" :: "r"(1));
+    /* Program PMU and enable all counters */
+    asm volatile("mcr p15, 0, %0, c9, c12, 0" :: "r"(PERF_DEF_OPTS));
+    asm volatile("mcr p15, 0, %0, c9, c12, 1" :: "r"(0x8000000f));
+
+    printf("LZO 64KB");
+    printf("Current Time (cycles), Last Time (cycles), Delta (usec)\n");
+    //XTime_GetTime(&old_time);
     for (int i = 0; i < LOOPS; i++) {
         Xil_L2CacheFlush();
+        old_time = generate_timestamp();
         ret_val = lzo_test(&in_len, &out_len);
+        new_time = generate_timestamp();
+        delta = diff_tikme(new_time, old_time, 666.0);
+        printf("%llu, %llu, %f\n", new_time, old_time, delta);
     }
-    XTime_GetTime(&new_time);
-    delta = new_time - old_time;
-    printf("LZO 64KB timed (%d loops): %llu - %llu = %llu\n", LOOPS, new_time, old_time, delta);
-    printf("Delta in ms: %llu\n", delta / TIMER_MHZ);
+    //XTime_GetTime(&new_time);
 
     if (ret_val == 0) {
         printf("compressed %lu bytes into %lu bytes\n",
