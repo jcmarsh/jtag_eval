@@ -13,7 +13,7 @@ RM := rm -rf
 all: pre-build main-build
 
 # Main-build Target
-main-build: fib_rec.elf secondary-outputs
+main-build: fib_rec.elf
 
 C_SRCS += ../common/platform.c helloworld.c
 
