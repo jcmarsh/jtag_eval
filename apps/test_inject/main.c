@@ -54,58 +54,37 @@ int write_data(unsigned int data) {
 
 int main()
 {
-  unsigned int x = 0xDEADBEEF, temp;
+  unsigned int x = 0xDEADBEEF;
 
   init_platform();
 
   printf("Starting program, x = %u\n", x);
+  printf("DSCCR address is 0x%08X\n", XPS_L2CC_BASEADDR + XPS_L2CC_DEBUG_CTRL_OFFSET);
   printf("X address is %p\n", &x);
 
+  asm("test_break:");
 
-  /* Attempt #1 <- Doesn't work
+  /* Method #1 */
   // 1. Disable write back / through
-  cache_freeze();
-
   // 2. Change a value
-  x = 8;
-
   // 3. Re-enable write back / through
-  cache_unfreeze();
 
-  // 4. Print the value <- pull from cache
-  printf("After injection, x = %u\n", x);
-
-  // 5. Flush the cache <- doesn't write back because not dirty
-  Xil_L2CacheFlush();
-
-  // 6. Print the value again <- pull from backing memory the original value
-  printf("After cache flush, x = %u\n", x);
-  */
-
-  /* Attempt #2 */
+  /* Method #2 */
   // 1. Read good value from memory
-  temp = x;
   // 2. Write bad value <- writes to cache and backing memory (I hope)
-  x = 8;
   // 3. Disable write-back and linefill
-  cache_freeze();
   // 4. Write good value <- should skip the cache on to backing memory
-  x = temp;
   // 5. Set cache back to normal / resume execution
-  cache_unfreeze();
-  // 6. Print value <- should read from cache / print bad value
-  printf("After injection, x = %u\n", x);
-  // 7. Flush cache <- wouldn't this write back the bad value?
+
+  /* Test to see if cache is coherent */
+  // Print value <- should read from cache / print bad value
+  printf("After injection, x = %u : 0x%08X\n", x, x);
+  // Flush cache <- wouldn't this write back the bad value?
   Xil_L2CacheFlush();
-  // 8. Print value <- should read good value from backing memory
-  printf("After cache flush, x = %u\n", x);
+  // Print value <- should read good value from backing memory
+  printf("After cache flush, x = %u : 0x%08X\n", x, x);
 
-  /* Set a breakpoint on this label to let DrSEUS restart exectuion when ready. */
-  //asm("drseus_start_tag:");
-        
   exit_platform();
-
-  //xil_printf("safeword ");
 
   return 0;
 }

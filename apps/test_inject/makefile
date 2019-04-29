@@ -36,6 +36,8 @@ test_inject.elf: $(OBJS) $(LD_SRCS) $(USER_OBJS)
 	arm-none-eabi-gcc -mcpu=cortex-a9 -mfpu=vfpv3 -mfloat-abi=hard -Wl,-build-id=none $(SPEC) -Wl,-T -Wl,$(LD_SRCS) $(LIB) -o "test_inject.elf" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
+	arm-none-eabi-objdump -d test_inject.elf | grep test_break
+	@echo ' '
 
 # Other Targets
 clean:
