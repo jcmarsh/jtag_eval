@@ -222,7 +222,7 @@ int main(int argc, char *argv[])
         old_time = generate_timestamp();
         ret_val = lzo_test(&in_len, &out_len);
         new_time = generate_timestamp();
-        delta = diff_tikme(new_time, old_time, 666.0);
+        delta = diff_time(new_time, old_time, 666.0);
         printf("%llu, %llu, %f\n", new_time, old_time, delta);
     }
     //XTime_GetTime(&new_time);
