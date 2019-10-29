@@ -180,7 +180,7 @@ int main(int argc, char *argv[])
     */
 
     // Set data to be from the kepler_data array
-    printf("Using kepler data, no more that 32K: %d\n", in_len);
+    printf("Using kepler data, no more that 128K: %d\n", in_len);
     memcpy(in, kepler_data, in_len);
     printf("Setting input to Kepler: 0x%02X 0x%02X 0x%02X 0x%02X\n", in[0], in[1], in[2], in[3]);
     printf("Setting input to Kepler: 0x%02X 0x%02X 0x%02X 0x%02X\n", in[4], in[5], in[6], in[7]);
@@ -215,12 +215,8 @@ int main(int argc, char *argv[])
     }
 
     // check if results are the same
-    /*
-    ret_val = memcmp(cmp, out, in_len);
-    if (ret_val != 0) {
-      printf("Data does not match with warm-up run\n");
-    }
-    */
+    ret_val = memcmp(in, kepler_data, in_len);
+    printf("memcmp result: %d\n", ret_val);
 
     exit_platform();
 
